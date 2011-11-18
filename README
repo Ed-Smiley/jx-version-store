@@ -1,0 +1,4 @@
+Implement a Maven-like bucket repository on top of Jxtr.
+# If you are not using any format, just use regular Jxtr for free format buckets.
+# author: Ed Smiley
+# copyright ebrary 2011
