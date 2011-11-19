@@ -1,4 +1,53 @@
 Implement a Maven-like bucket repository on top of Jxtr.
-# If you are not using any format, just use regular Jxtr for free format buckets.
-# author: Ed Smiley
-# copyright ebrary 2011
+ If you are not using any format, just use regular Jxtr for free format buckets.
+ author: Ed Smiley
+ copyright ebrary 2011
+
+
+Simple usage example:
+
+jxstore = JXVersionStore.new('com.ebrary.isis', 'release', 2.01)
+jxstore.store '/Users/your-name/git/isis/release'
+...
+jxstore.fetch 'a-target-dir'
+
+Start over:
+
+jxstore.kill
+...
+
+Advanced:
+By default, all namespaces are put off a 'common' namespace.  This is for official versions.  
+If you want to simulate switching between versions you can use a developer namespace to create your own version
+1.0, 2.0 and so on.  You can set scripts to dynamically change namespace and then you can pretend to be using the
+real release, but with your test code.  So:
+
+jxstore = JXVersionStore.new('com.ebrary.isis', 'release', 2.01. 'my-dev')
+jxstore.store '/Users/your-name/git/isis/release'
+...
+jxstore.fetch 'a-target-dir'
+...
+
+You can set the number of JXTR threads to use:
+jxstore = JXVersionStore.new('com.ebrary.isis', 'release', 2.01. 'my-dev', 4)
+
+If you are setting up an environment to do builds, you don't really need to check the manifest for a download all the time 
+for the same version each time you do a build. 
+
+jxstore.fetch_local 'a-target-dir'
+
+If the cached copy exists, this will automatically download it the first time, and use the cached copy thereafter. 
+This should only be dome with stable, official releases, where you will not have to chaeck often to see if things have changed.
+
+You can install a cached copy on machines without transfering it anywhere else by using fetch with no arguments.
+
+
+Additional notes:
+* project: e.g. 'com.ebrary.isis'
+* component: e.g. 'utils', 'toolkit', 'release' etc.
+* version: e.g '1.0.1', '2.0' etc.
+* user_namespace: either a private personal namespace, or as 'common'--a public namespace (default)
+* threads: number of threads to use for sending and receiving. default = DEFAULT_THREADS
+
+Using a file separator ('/') or ':' or illegal filesystem character in a project or component or version 
+are not supported.  Versions can be numeric, but they do not have to be.
