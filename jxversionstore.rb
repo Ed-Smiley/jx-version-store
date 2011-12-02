@@ -1,4 +1,6 @@
 require 'fileutils'
+require 'digest'
+
 require 'jxrepo'
 require 'jxtr/receiver'
 require 'jxtr/sender'
@@ -34,6 +36,7 @@ S3_STORE = ENV['AMAZON_S3_STORE']
 class JXVersionStore
   include Jxtr
   include Utils
+
   attr_reader :repo
   attr_reader :threads
   
@@ -65,22 +68,10 @@ class JXVersionStore
       else
         dir = src + '/'
       end
-      if File.exists? "#{src}/manifest"
-        manifest_files = parse_manifest(IO.read(::File.join(src, 'manifest'))).subset(
-          Dir["#{src}/**/*"].each do |f|
-            f.sub! dir, ''
-          end
-          )
-      else
-        manifest_files = 
-        Dir["#{src}/**/*"].each do |f|
-          f.sub! dir, ''
-        end
-      end
-
-      p manifest_files
-      write_manifest manifest_files, src + '/manifest'
-      puts "DEBUG: sending to: #{dest}  at #{S3_STORE}"
+      manifest = make_manifest src
+      manifest_file = ::File.join(src, 'manifest')
+      write_manifest manifest, manifest_file
+      puts "Sending: #{dest} to #{S3_STORE}"
       sender = Sender.new(S3_STORE, src, dest)
       sender.send @threads, &REPORTER
     elsif !File.directory?(src)
@@ -129,5 +120,22 @@ class JXVersionStore
     deleter.delete remote_data, @threads, &REPORTER
   end
   
+  private
+  
+  def make_manifest files_dir, manifest_name='manifest'
+    manifest = {}
+    files = Dir["#{files_dir}/**/*"]
+    files.each do |f|
+      if !File.directory? f
+        hash = Digest::MD5.file(f).hexdigest
+        file = f.sub "#{files_dir}/", ''
+        if file!=manifest_name
+          manifest[file] = hash
+        else
+        end
+      end
+    end
+    manifest
+  end
 end
 
