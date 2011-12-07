@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+# Copyright 2011 ebrary
+# Create Isis toolkit in a Maven-ish JXTR repo on S3
+# author Ed Smiley
 require 'optparse'
 require 'jxparameter_spec'
 
