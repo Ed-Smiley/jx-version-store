@@ -5,13 +5,7 @@
 # Usage: ./toolkitter.rb [store|fetch]
 # Version number for this release
 
-require 'tempfile'
-require 'fileutils'
-require 'jxtr/receiver'
-require 'jxtr/sender'
-require 'jxtr/deleter'
-require 'jxversionstore'
-
+require 'jxartifact'
 
 VERSION_NUMBER = ENV["ISIS_VERSION"]
 
@@ -38,12 +32,10 @@ else
 end
 puts "ISIS_RELEASE=#{ISIS_RELEASE}"
 puts "ISIS TOOLKIT PROJECT=#{PROJECT}"
-puts "ISIS TOOLKIjxstoreE=#{MODULE}"
+puts "ISIS TOOLKI MODULE=#{MODULE}"
 puts "ISIS TOOLKIT VERSION=#{VERSION}"
 
-#group = GROUP
-
-def dependencies
+dependencies =
   [  "#{ISIS_RELEASE}/isis-modules/document-client.jar", 
       "#{ISIS_RELEASE}/isis-modules/document-processor.jar", 
       "#{ISIS_RELEASE}/isis-server/client-server.jar", 
@@ -58,42 +50,14 @@ def dependencies
       "#{ISIS}/lib/common.jar",
       "#{ISIS}/artifactor/lib/IsisServices.rb", #TODO, make part of vertical generator
       "#{ISIS}/artifactor/lib/IsisUtil.rb", #TODO, make part of vertical generator
-  ].each do |dep|  
-    begin 
-      warn "Please rebuild Isis in: '#{ISIS}'.  Missing required file: '#{dep}'."
-      exit(1)
-    end unless File.exist?(dep)
-  end
-end
+  ]
 
-def store_toolkit
-  puts 'Creating temporary workspace.'
-  tempdir = "#{Dir.tmpdir}/_d#{rand 99999999999999}"
-  if !File.exists? tempdir
-    Dir.mkdir tempdir
-  end
-  FileUtils.chmod(0777, tempdir)
-  dependencies.each do |d|
-    FileUtils.cp d, tempdir
-  end
-  jxstore = JXVersionStore.new(PROJECT, MODULE, VERSION)
-  puts 'Storing toolkit.'
-  jxstore.store tempdir
-  puts 'Cleaning temporary workspace.'
-  FileUtils.rm_r(tempdir)
-end
+puts "ISIS_RELEASE=#{ISIS_RELEASE}"
+puts "ISIS TOOLKIT PROJECT=#{PROJECT}"
+puts "ISIS TOOLKIjxstoreE=#{MODULE}"
+puts "ISIS TOOLKIT VERSION=#{VERSION}"
 
-
-def fetch_toolkit dest='isis_toolkit'
-  jxstore = JXVersionStore.new(PROJECT, MODULE, VERSION)
-  jxstore.fetch dest
-end
-
-def clean_toolkit
-  jxstore = JXVersionStore.new(PROJECT, MODULE, VERSION)
-  jxstore.kill
-end
-
+jxartifact = JXArtifact.new(ISIS_RELEASE, PROJECT, MODULE, VERSION, dependencies)
 
 # computes and returns the GIT SHA1 for an Isis release 
 def isis_git_sha1(isis_git_dir=ISIS_RELEASE)
