@@ -6,8 +6,8 @@
 # Usage: ./toolkitter.rb [store|fetch]
 # Version number for this release
 
-require 'jxartifact'
-require 'jxparameter'
+require 'lib/jxartifact'
+require 'lib/jxparameter'
 
 def class IsisToolkit
   attr_accessor :art

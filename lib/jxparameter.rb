@@ -3,7 +3,7 @@
 # Create Isis toolkit in a Maven-ish JXTR repo on S3
 # author Ed Smiley
 require 'optparse'
-require 'jxparameter_spec'
+require 'lib/jxparameter_spec'
 
 class JXParameter
   include JXParameterSpec
