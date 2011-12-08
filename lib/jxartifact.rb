@@ -2,6 +2,7 @@
 # Encapsulate a Maven-like artifact implmented using a JXTR repo on S3
 # author Ed Smiley
 #
+require 'jxversionstore'
 
 class JXArtifact
   attr_accessor :release

@@ -1,11 +1,12 @@
 require 'fileutils'
 require 'digest'
 
-require 'jxrepo'
 require 'jxtr/receiver'
 require 'jxtr/sender'
 require 'jxtr/deleter'
 require 'jxtr/utils'
+
+require 'lib/jxrepo'
 
 # Implement a Maven-like bucket repository on top of Jxtr.
 # If you are not using any format, just use regular Jxtr for free format buckets.
