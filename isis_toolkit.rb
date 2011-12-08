@@ -17,7 +17,7 @@ class IsisToolkit
   attr_reader :module
 
   def initialize
-    @isis_location = ENV["isis_location"]
+    @isis_location = ENV["ISIS"]
     if @isis_location.nil?
       @isis_location = '../isis'
     end
