@@ -50,9 +50,7 @@ class IsisToolkit
           "#{@isis_release}/isis-server/user-server.jar", 
           "#{@isis_release}/isis-server/util.jar", 
           "#{@isis_release}/admin/lib/netstore.jar",
-          "#{@isis_location}/lib/common.jar",
-          "#{@isis_location}/artifactor/lib/IsisServices.rb", #TODO, make part of vertical generator
-          "#{@isis_location}/artifactor/lib/IsisUtil.rb", #TODO, make part of vertical generator
+          "#{@isis_location}/lib/common.jar"      
       ]
 
     @art = JXArtifact.new(@isis_release, @project, @module, @version, @dependencies)
