@@ -90,7 +90,7 @@ class JXVersionStore
       FileUtils.mkdir_p(dest+'/')
     end 
     receiver = Receiver.new S3_STORE
-    puts "DEBUG: fetching from: #{src} at #{S3_STORE}"
+    puts "fetching from: #{src} at #{S3_STORE}"
     receiver.receive src, dest, @threads, &REPORTER
   end
   
